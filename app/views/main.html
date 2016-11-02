@@ -1,23 +1,41 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
+
+<div id="total-container" class="row">
+    <div id="amount" class="col-xs-12 col-centered">
+      <input type="text" placeholder="$ {{total}}">
+        
+      </input>
+    </div>
 </div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
 
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
+<div id="dial-pad" class="row">
+  <div class="col-xs-12">
+    <div class="row" >
+      <div class="col-xs-4 text-center dial-input" ng-repeat="dial_btn in dial_btns" ng-bind="dial_btn" ng-click="append_number(dial_btn)"></div>
+    </div>
+  </div>
+</div>
 
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+
+</br>
+<div id="transaction-details">
+    <h5> SHARE WITH </h5>
+    <div id="share-with" class="row">
+        <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" ng-click="friend.active = !friend.active"><span class="avatar" ng-class="{'avatar--active': friend.active}"><span ng-if="friend.active" class="glyphicon glyphicon-ok"></span></span>{{friend.name + ' '  + friend.surname}}</div>
+    </div>
+
+    <h5> SPLIT SHARE</h5>
+    <div id="share-with" class="row">
+        <div class="col-xs-12" ng-repeat="friend in friends | filter:friend.active=true">
+          <p ng-bind="friend.name +' ' + friend.surname" class="inline" style="width:30%"></p>
+          <p ng-bind="friend.amount | currency:'$ ':2" class="inline" style="width:27%"></p>
+          <input ng-model="friend.amount" class="inline" style="width:27%"></input>
+          <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
+          <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>
+        </div>
+    </div>
+</div>
+
+<div id="submit-transaction">
+    <div id="submit-btn">SPLIT</div>
 </div>

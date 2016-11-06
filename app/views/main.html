@@ -1,59 +1,76 @@
 <div id="total-container" class="row">
     <div id="amount" class="col-xs-12 col-centered">
-      <input type="text" placeholder="$ {{total}}">
+      <input type="text" placeholder="$ {{total}}" disabled>
         
       </input>
     </div>
-</div>
-<!-- {{$localStorage}} -->
+</div>  
 
-<div id="dial-pad" class="row">
-  <div class="col-xs-12">
-    <div class="row" >
-      <div class="col-xs-4 text-center dial-input" ng-repeat="dial_btn in dial_btns" ng-bind="dial_btn" ng-click="append_number(dial_btn)"></div>
+<section class="step-section" ng-show= "currentState == states.enterAmount">
+  <div id="dial-pad" class="row">
+    <div class="col-xs-12">
+      <div class="row" >
+        <div class="col-xs-4 text-center dial-input" ng-repeat="dial_btn in dial_btns" ng-bind="dial_btn" ng-click="append_number(dial_btn)"></div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-
-</br>
-<div id="transaction-details">
-
-
-    <div id="choosePayer" ng-if="showChoosePayer">
-        <h5> Who sacrificed to pay the bill this time? </h5>
-        <div id="share-with" class="row">
-            <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" ng-click="payer = friend.name+friend.surname; submitSplit()"><span class="avatar" ng-class="{'avatar--active': payer == friend.name+friend.surname }"><span ng-if="payer == friend.name+friend.surname" class="glyphicon glyphicon-ok"></span></span>{{friend.name + ' '  + friend.surname}}</div>
-        </div>  
-
-        <span ng-bind="message" class="text-center"></span> 
-    </div>
+<section class="step-section" ng-show="currentState == states.selectFriends">
     <div ng-show="!showChoosePayer">
-      <h5> SHARE WITH </h5>
+      <h5 class="section-title"> SHARE WITH </h5>
+      <br>
       <div id="share-with" class="row">
           <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" 
             ng-click="friend.active = !friend.active">
               <span class="avatar" ng-class="{'avatar--active': friend.active}">
                 <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
               </span>
-              {{friend.name + ' '  + friend.surname}}
-          </div>
-      </div>
-
-      <h5> SPLIT SHARE</h5>
-      <div id="share-with" class="row">
-          <div class="col-xs-12" ng-repeat="friend in friends | filter:{ 'active': true }">
-            {{friend.active}}
-            <p class="inline" style="width:30%">{{friend.name + ' ' + friend.surname}}</p>
-            <p class="inline" style="width:27%">{{friend.amount | currency:'$ ':2}}</p>
-            <input ng-model="friend.amount" class="inline" style="width:27%"></input>
-            <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
-            <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>
+              <p style="height:16px;">{{friend.name + ' '  + friend.surname}} </p>
           </div>
       </div>
     </div>
-</div>
+</section>
+
+<section class="step-section" ng-show="currentState == states.selectFriendsAmount">
+    <div ng-show="!showChoosePayer">
+      <h5 class="section-title"> choose how much each pays</h5>
+      <br>
+      <div id="share-with" class="row">
+          <div class="col-xs-12" ng-repeat="friend in friends | filter:{ 'active': true }">
+            <p class="inline" style="width:30%">{{friend.name + ' ' + friend.surname}}</p>
+            <p class="inline" style="width:27%" ng-show="!friend.fix">{{friend.amount | currency:'$ ':2}}</p>
+            <input ng-model="friend.amount" class="inline fix-input" ng-show="friend.fix" style="width: 24%; margin-right: .8em;"></input>
+            <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
+            <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>
+            <br>
+            <br>
+          </div>
+      </div>
+    </div>
+  
+    <br>
+
+    <h5 class="section-title"> Who sacrificed to pay the bill this time? </h5>
+    <br>
+    <div id="share-with" class="row">
+       <div ng-repeat="friend in friends | filter:{ 'active': true } | orderBy:'name'" >
+        <div class="clearfix" ng-if="$index % 4 == 0"></div>
+        <div class="col-xs-3 text-center text-uppercase avatar-container" ng-click=" payer = friend.name+friend.surname;">
+          <span class="avatar" ng-class="{'avatar--active': payer == friend.name+friend.surname }">
+            <span ng-if="payer == friend.name+friend.surname" class="glyphicon glyphicon-ok"></span>
+          </span>{{friend.name + ' '  + friend.surname}}</div>
+        </div>
+    </div>  
+
+    <span ng-bind="message" class="text-center"></span> 
+
+</section>
 
 <div id="submit-transaction">
-    <div id="submit-btn" ng-click="beforeSubmitSplit()">SPLIT</div>
+    <div class="btn-group row" style="width:100%">
+      <button id=" inline" class="col-xs-6" ng-click="doBack()" ng-if="showBack()">back</button>
+      <button id=" inline" class="col-xs-6" ng-click="submitSplit()" ng-if="currentState == states.selectFriendsAmount">split</button>
+      <button id=" inline" class="col-xs-6" ng-click="doNext()" ng-if="showNext()">next</button>
+    </div>
 </div>

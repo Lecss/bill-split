@@ -13,16 +13,29 @@ angular.module('billSplitApp')
         $scope.dial_btns = [1,2,3,4,5,6,7,8,9,"",0, "<-"];
 
         $scope.$localStorage = $localStorage;
-        $scope.total = "0.00";
+        $scope.total = "10.00";
         $scope.payer = "";
         $scope.showChoosePayer = false;
         $scope.message = "";
+
+        $scope.states = { 
+            enterAmount : "enterAmount",
+            selectFriends: "selectFriends",
+            selectFriendsAmount : "selectFriendsAmount"
+
+        }
+
+        $scope.currentState = $scope.states.enterAmount;
 
         $scope.friends = [];
 
         $scope.init = function(){
             $scope.friends.push({
-                name: "Andreo", surname: "C.", active: false, avatar: "", amount: 0.00, fix: false
+                name: "Andreo", surname: "C.", active: true, avatar: "", amount: 0.00, fix: false
+            }); 
+
+            $scope.friends.push({
+                name: "Alecs", surname: "D.", active: true, avatar: "", amount: 0.00, fix: false
             });
 
             $scope.friends.push({
@@ -75,16 +88,6 @@ angular.module('billSplitApp')
             $scope.update_split_amount();
         };
 
-        $scope.beforeSubmitSplit = function(){
-            var transaction = getNewTransaction();
-
-            if( transaction.total === "0.00" ){
-                return;
-            }
-
-            $scope.showChoosePayer = true;
-        };  
-
         $scope.submitSplit = function(){
             var transaction = getNewTransaction();
             var transactionsRef = database.ref('transactions');
@@ -102,6 +105,31 @@ angular.module('billSplitApp')
               }, 1000);
             });
         };
+
+        $scope.doNext = function(){
+            if( $scope.currentState == $scope.states.enterAmount ){
+                $scope.currentState = $scope.states.selectFriends;
+            }else{
+                $scope.currentState = $scope.states.selectFriendsAmount;
+            }
+        }
+
+        $scope.doBack = function(){
+            if( $scope.currentState == $scope.states.selectFriendsAmount ){
+                $scope.currentState = $scope.states.selectFriends;
+            }else{
+                $scope.currentState = $scope.states.enterAmount;
+            }
+        }
+
+        $scope.showBack = function(){
+            return $scope.currentState != $scope.states.enterAmount && $scope.currentState != $scope.states.selecFriendsAmount;
+        }
+
+        $scope.showNext = function(){
+            return $scope.currentState != $scope.states.selectFriendsAmount;
+        }
+
 
         var getNewTransaction = function() {
             var transaction = {

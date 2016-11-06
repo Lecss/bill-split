@@ -31,14 +31,21 @@
     <div ng-show="!showChoosePayer">
       <h5> SHARE WITH </h5>
       <div id="share-with" class="row">
-          <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" ng-click="friend.active = !friend.active"><span class="avatar" ng-class="{'avatar--active': friend.active}"><span ng-if="friend.active" class="glyphicon glyphicon-ok"></span></span>{{friend.name + ' '  + friend.surname}}</div>
+          <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" 
+            ng-click="friend.active = !friend.active">
+              <span class="avatar" ng-class="{'avatar--active': friend.active}">
+                <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
+              </span>
+              {{friend.name + ' '  + friend.surname}}
+          </div>
       </div>
 
       <h5> SPLIT SHARE</h5>
       <div id="share-with" class="row">
-          <div class="col-xs-12" ng-repeat="friend in friends | filter:friend.active=true">
-            <p ng-bind="friend.name +' ' + friend.surname" class="inline" style="width:30%"></p>
-            <p ng-bind="friend.amount | currency:'$ ':2" class="inline" style="width:27%"></p>
+          <div class="col-xs-12" ng-repeat="friend in friends | filter:{ 'active': true }">
+            {{friend.active}}
+            <p class="inline" style="width:30%">{{friend.name + ' ' + friend.surname}}</p>
+            <p class="inline" style="width:27%">{{friend.amount | currency:'$ ':2}}</p>
             <input ng-model="friend.amount" class="inline" style="width:27%"></input>
             <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
             <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>

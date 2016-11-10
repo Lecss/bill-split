@@ -2,6 +2,24 @@ $light-purple : #434657;
 $bg-purple: #15172D;
 $pink : #FA3252;
 $purple-blue: #4C52FD;
+$grey : rgb(117, 121, 131);
+
+body { 
+    font-family: 'Roboto';
+}
+
+.wrapper{ 
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+    position:fixed;
+    width: 100vw;
+    height:100vh; 
+    left:0; 
+}
+
+.grey { 
+    color: $grey;
+}
 
 .step-section {
     position: absolute; 
@@ -9,21 +27,41 @@ $purple-blue: #4C52FD;
     bottom:3em; 
     left:0; 
     right:0;
+    overflow: scroll;
+
+    -webkit-transition: transform 500ms ease;
+    -moz-transition: transform 500ms ease;
+    -o-transition: transform 500ms ease;
+    transition: transform 500ms ease;
     
-    padding:1em;
+   
+
+    -webkit-transform:translateY(100%);
+    -moz-transform:translateY(100%);
+    -o-transform:translateY(100%);
+    transform:translateY(100%);
+    
+    padding: 1.5em;
     background: -webkit-linear-gradient(#1C1F38, $bg-purple); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#1C1F38, $bg-purple); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#1C1F38, $bg-purple); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#1C1F38, $bg-purple); /* Standard syntax */
 
     color: white;
-
     border-top: 1px solid rgba(0,0,0,.78);
+   
 
     .section-title { 
         color: $purple-blue;
         margin:0 auto;
-        text-align: center;
+        text-align: center;   
+    }
+
+    &.active { 
+        -webkit-transform:translateY(0%);
+        -moz-transform:translateY(0%);
+        -o-transform:translateY(0%);
+        transform:translateY(0%);   
     }
 }
 
@@ -42,28 +80,86 @@ $purple-blue: #4C52FD;
     background: transparent;
     border: none;
     border-bottom: 1px solid $pink;
-
+    max-width:100%;
     &:focus { outline : 0 ; }
 }
 
+.friend-amount { 
+    border-bottom: 1px solid black;
+    margin-bottom: 1em;
+}
+
 .avatar-container{ 
-    font-size:11px; 
+    font-size:12px; 
     margin-bottom:1em;
+    color: $grey;
+    padding:.2em;
+
     .avatar { 
         display:block;
-        width:4em;
-        height:4em;
+        width: 5em;
+        height: 5em;
         border-radius: 50%;
-        background: #ccc;
+        background: white;
         margin: 0 auto;
         margin-bottom:.5em;
-
+        -webkit-transform:translate(0%,0%);
+        transform:translate(0%,0%);
+        overflow: hidden;
+        position:relative;
+        
         .glyphicon-ok { 
-                height: 100%;
+            height: 100%;
             width: 100%;
             display: block;
             font-size: 20px;
-            top: 0.55em;
+            top: .85em;
+            z-index:200;
+            color: white;
+        }
+
+        &.avatar--small { 
+            width:4em;
+            height:4em;
+
+            .glyphicon-ok{
+                top:.75em;
+            }
+        }
+        &:before, &:after {
+          content:'';
+          display:block;
+          position:absolute;
+          top:0; right:0; bottom:0; left:0;
+          border-radius:50%;
+          border:3px solid $pink;
+          opacity: .7;
+        }
+
+        &:before{
+            transform:scale(1.14);
+            opacity: .5;
+        }
+
+        img { 
+            position:absolute; 
+            top:0; bottom:0; right:0; left:0;
+            max-width: 100%;
+        }
+
+        &.avatar--active {
+            img { 
+                filter: opacity(.8);
+            }
+        }
+
+        &.avatar--add { 
+            background: rgba(255,255,255, 0.6);
+            .material-icons{ 
+                font-size: 35px;
+                position: relative;
+                top: .3em;
+            } 
         }
     }
 }
@@ -79,7 +175,7 @@ $purple-blue: #4C52FD;
 #submit-transaction { 
     background: $pink;
     text-align: center;
-    padding: 1em;
+   
     position: fixed;
     left: 0;
     right: 0;
@@ -91,6 +187,17 @@ $purple-blue: #4C52FD;
 
     button { 
         text-transform: uppercase;
+        background: none;
+        border: none;
+        padding: 1em;
+
+        &:focus { 
+            outline:0;
+        }
+
+        &:nth-child(2){ 
+            border-left: 1px solid black;
+        }
     }
 }
 
@@ -107,7 +214,7 @@ $purple-blue: #4C52FD;
 
 
 .fixed-or-equal { 
-
+        
         &.left { border-radius: 12px 0px 0px 12px; }
         &.right { border-radius: 0px 12px 12px 0px; margin-left: -3px; }
         
@@ -116,6 +223,7 @@ $purple-blue: #4C52FD;
         width: 4em;
         opacity:.8; 
         margin: 0;
+        padding: 0.5em .5em;
         
         &:focus { 
             outline:0;

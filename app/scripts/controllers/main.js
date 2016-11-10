@@ -13,7 +13,7 @@ angular.module('billSplitApp')
         $scope.dial_btns = [1,2,3,4,5,6,7,8,9,"",0, "<-"];
 
         $scope.$localStorage = $localStorage;
-        $scope.total = "10.00";
+        $scope.total = "0.00";
         $scope.payer = "";
         $scope.showChoosePayer = false;
         $scope.message = "";
@@ -21,9 +21,12 @@ angular.module('billSplitApp')
         $scope.states = { 
             enterAmount : "enterAmount",
             selectFriends: "selectFriends",
-            selectFriendsAmount : "selectFriendsAmount"
+            selectFriendsAmount : "selectFriendsAmount",
+            addFriend : "addFriend"
 
         }
+
+        $scope.newFriend = { name: "", surname : ""};
 
         $scope.currentState = $scope.states.enterAmount;
 
@@ -31,23 +34,23 @@ angular.module('billSplitApp')
 
         $scope.init = function(){
             $scope.friends.push({
-                name: "Andreo", surname: "C.", active: true, avatar: "", amount: 0.00, fix: false
+                name: "Andreo", surname: "C.", active: true, avatar: "andrei", amount: 0.00, fix: false
             }); 
 
             $scope.friends.push({
-                name: "Alecs", surname: "D.", active: true, avatar: "", amount: 0.00, fix: false
+                name: "Alecs", surname: "D.", active: true, avatar: "lecs", amount: 0.00, fix: false
             });
 
             $scope.friends.push({
-                name: "Dragos", surname: "C.", active: false, avatar: "", amount: 0.00, fix: false
+                name: "Dragos", surname: "C.", active: false, avatar: "dragos", amount: 0.00, fix: false
             });
 
             $scope.friends.push({
-                name: "Marius", surname: "P.", active: false, avatar: "", amount: 0.00, fix: false
+                name: "Marius", surname: "P.", active: false, avatar: "marius", amount: 0.00, fix: false
             });
 
             $scope.friends.push({
-                name: "Geo", surname: "P.", active: false, avatar: "", amount: 0.00, fix: false
+                name: "Geo", surname: "P.", active: false, avatar: "geo", amount: 0.00, fix: false
             });
         }();
 
@@ -72,6 +75,10 @@ angular.module('billSplitApp')
 
         $scope.$watch('friends',function(o,n){
             $scope.update_split_amount();
+        }, true);
+
+        $scope.$watch('currentState',function(o,n){
+            console.log(o,n);
         }, true);
 
 
@@ -109,6 +116,10 @@ angular.module('billSplitApp')
         $scope.doNext = function(){
             if( $scope.currentState == $scope.states.enterAmount ){
                 $scope.currentState = $scope.states.selectFriends;
+            }else if($scope.currentState == $scope.states.addFriend){
+                $scope.friends.push($scope.newFriend);
+                $scope.newFriend = {};
+                $scope.currentState = $scope.states.selectFriends;
             }else{
                 $scope.currentState = $scope.states.selectFriendsAmount;
             }
@@ -116,6 +127,8 @@ angular.module('billSplitApp')
 
         $scope.doBack = function(){
             if( $scope.currentState == $scope.states.selectFriendsAmount ){
+                $scope.currentState = $scope.states.selectFriends;
+            }else if($scope.currentState == $scope.states.addFriend){
                 $scope.currentState = $scope.states.selectFriends;
             }else{
                 $scope.currentState = $scope.states.enterAmount;
@@ -130,6 +143,9 @@ angular.module('billSplitApp')
             return $scope.currentState != $scope.states.selectFriendsAmount;
         }
 
+        $scope.reload = function(){
+            $scope.currentState = $scope.states.enterAmount;
+        }
 
         var getNewTransaction = function() {
             var transaction = {

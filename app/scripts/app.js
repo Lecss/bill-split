@@ -33,4 +33,19 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+
+  .directive('imageonload', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('load', function() {
+                element.addClass("loaded")
+
+            });
+            element.bind('error', function(){
+               // alert('image could not be loaded');
+            });
+        }
+    };
+});

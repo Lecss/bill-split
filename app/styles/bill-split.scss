@@ -17,8 +17,22 @@ body {
     left:0; 
 }
 
+.scroll-y { 
+    overflow-y: scroll;
+   -webkit-overflow-scrolling: touch;
+   height:100%; //A value other than height:auto needs to be set
+
+   overflow-x: hidden;
+}
+
 .grey { 
     color: $grey;
+}
+
+.removeFriend { 
+    &.active { 
+        color: red;
+    }
 }
 
 .step-section {
@@ -95,18 +109,20 @@ body {
     color: $grey;
     padding:.2em;
 
+
     .avatar { 
         display:block;
         width: 5em;
         height: 5em;
         border-radius: 50%;
-        background: white;
+        background: transparent;
         margin: 0 auto;
         margin-bottom:.5em;
         -webkit-transform:translate(0%,0%);
         transform:translate(0%,0%);
         overflow: hidden;
         position:relative;
+        background: rgba(255,255,255,0.2);
         
         .glyphicon-ok { 
             height: 100%;
@@ -145,6 +161,12 @@ body {
             position:absolute; 
             top:0; bottom:0; right:0; left:0;
             max-width: 100%;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            &.loaded { 
+                opacity: 1; 
+            }
         }
 
         &.avatar--active {

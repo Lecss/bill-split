@@ -17,14 +17,20 @@ angular.module('billSplitApp')
         $scope.payer = "";
         $scope.showChoosePayer = false;
         $scope.message = "";
+        $scope.editMode = false;
+        $scope.lastFriendSelected; 
+
 
         $scope.states = { 
             enterAmount : "enterAmount",
             selectFriends: "selectFriends",
             selectFriendsAmount : "selectFriendsAmount",
-            addFriend : "addFriend"
+            addFriend : "addFriend",
+            removeFriend : "removeFriend"
 
         }
+
+        var friendsRef = firebase.database().ref('friends/alecsD');
 
         $scope.newFriend = { name: "", surname : ""};
 
@@ -33,25 +39,45 @@ angular.module('billSplitApp')
         $scope.friends = [];
 
         $scope.init = function(){
-            $scope.friends.push({
-                name: "Andreo", surname: "C.", active: true, avatar: "andrei", amount: 0.00, fix: false
-            }); 
+            
+            friendsRef.on("child_added", function(resp){
+                var user = resp.val();
 
-            $scope.friends.push({
-                name: "Alecs", surname: "D.", active: true, avatar: "lecs", amount: 0.00, fix: false
+                if (!user.avatar) user.avatar = "images/user.png"
+
+                user.id = resp.key;
+                $scope.friends.push(user);
+            })
+
+            friendsRef.on('child_removed', function(data) {
+                var user = $scope.friends.filter(x=>x.key === data.key);
+                var index = $scope.friends.indexOf(user);
+                $scope.friends.splice(index, 1);
+
+                $scope.currentState = $scope.states.selectFriends;
             });
 
-            $scope.friends.push({
-                name: "Dragos", surname: "C.", active: false, avatar: "dragos", amount: 0.00, fix: false
-            });
+            // $scope.friends.push({
+            //     name: "Andreo", surname: "C.", active: false, avatar: "images/andrei.png", amount: 0.00, fix: false
+            // }); 
 
-            $scope.friends.push({
-                name: "Marius", surname: "P.", active: false, avatar: "marius", amount: 0.00, fix: false
-            });
+            // $scope.friends.push({
+            //     name: "Alecs", surname: "D.", active: false, avatar: "images/lecs.png", amount: 0.00, fix: false
+            // });
 
-            $scope.friends.push({
-                name: "Geo", surname: "P.", active: false, avatar: "geo", amount: 0.00, fix: false
-            });
+            // $scope.friends.push({
+            //     name: "Dragos", surname: "C.", active: false, avatar: "images/dragos.png", amount: 0.00, fix: false
+            // });
+
+            // $scope.friends.push({
+            //     name: "Marius", surname: "P.", active: false, avatar: "images/marius.png", amount: 0.00, fix: false
+            // });
+
+            // $scope.friends.push({
+            //     name: "Geo", surname: "P.", active: false, avatar: "images/geo.png", amount: 0.00, fix: false
+            // });
+
+           
         }();
 
 
@@ -113,11 +139,25 @@ angular.module('billSplitApp')
             });
         };
 
+        $scope.addRemoveFriend = function( friend ){
+            $scope.lastFriendSelected = friend;
+
+            if( !$scope.editMode ) {
+                friend.active = !friend.active
+            } else { 
+                $scope.currentState = $scope.states.removeFriend;
+            }
+        }
+
+        $scope.removeFriend = function(){
+            friendsRef.child($scope.lastFriendSelected.id).remove();
+        }
+
         $scope.doNext = function(){
             if( $scope.currentState == $scope.states.enterAmount ){
                 $scope.currentState = $scope.states.selectFriends;
             }else if($scope.currentState == $scope.states.addFriend){
-                $scope.friends.push($scope.newFriend);
+                friendsRef.push($scope.newFriend);
                 $scope.newFriend = {};
                 $scope.currentState = $scope.states.selectFriends;
             }else{

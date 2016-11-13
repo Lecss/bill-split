@@ -6,3 +6,20 @@
 .inline { 
     display:inline-block;
 }
+
+
+.flex-row { 
+    display: flex; 
+    flex-flow: row wrap;
+    
+    .flex-col { 
+        align-content: center;
+    }
+}
+
+
+.full-center { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

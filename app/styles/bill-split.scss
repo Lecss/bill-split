@@ -6,15 +6,11 @@ $grey : rgb(117, 121, 131);
 
 body { 
     font-family: 'Roboto';
+    overflow: hidden;
 }
 
 .wrapper{ 
-    overflow-y: hidden !important;
-    overflow-x: hidden !important;
-    position:fixed;
-    width: 100vw;
-    height:100vh; 
-    left:0; 
+
 }
 
 .scroll-y { 
@@ -41,7 +37,7 @@ body {
     bottom:3em; 
     left:0; 
     right:0;
-    overflow: scroll;
+    overflow: hidden;
 
     -webkit-transition: transform 500ms ease;
     -moz-transition: transform 500ms ease;
@@ -80,7 +76,7 @@ body {
 }
 
 #total-container {
-    margin-top: 2em;
+    width:100%;
     input {
         font-size: 4em;
         background: transparent;
@@ -107,13 +103,15 @@ body {
     font-size:12px; 
     margin-bottom:1em;
     color: $grey;
-    padding:.2em;
+    padding:.5em;
+    flex-direction: column;
+    text-align: center;
 
 
     .avatar { 
         display:block;
-        width: 5em;
-        height: 5em;
+        width: 4.7em;
+        height: 4.7em;
         border-radius: 50%;
         background: transparent;
         margin: 0 auto;
@@ -225,12 +223,16 @@ body {
 
 
 #dial-pad {
+    height:100%;
+    align-items: stretch;
+    margin: auto -15px;
     .dial-input { 
         opacity: .86;
         color: white;
         padding: .5em; 
         font-weight: 100; 
         font-size:2em;
+        width:33.33%;
     }
 }
 

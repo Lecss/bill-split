@@ -1,144 +1,122 @@
 
-<div class="wrapper">
-  <div id="total-container" class="row">
-      <div id="amount" class="col-xs-12 col-centered">
+<div class="wrapper flex-row">
+  <div id="total-container">
+      <div id="amount" class="col-xs-12">
         <input type="text" placeholder="$ {{total}}" disabled>
         </input>
       </div>
   </div>  
 
-    <section class="step-section" ng-class= "{ active: currentState == states.enterAmount }">
-      <h5 class="section-title"> ENTER TOTAL</h5>
-      <div id="dial-pad" class="row">
-        <div class="col-xs-12">
-          <div class="row" >
-            <div class="col-xs-4 text-center dial-input ripple-effect" ng-repeat="dial_btn in dial_btns" ng-bind="dial_btn" ng-click="append_number(dial_btn)"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <section class="step-section" ng-class= "{ active: currentState == states.enterAmount }">
+    <h5 class="section-title"> ENTER TOTAL</h5>
+    <div id="dial-pad" class="flex-row">
+        <div class="dial-input ripple-effect full-center" ng-repeat="dial_btn in dial_btns" ng-bind="dial_btn" ng-click="append_number(dial_btn)"></div>
+    </div>
+  </section>
 
-    <section class="step-section" ng-class="{ active : currentState == states.selectFriends}" style="overflow:hidden;">
-        <div ng-show="!showChoosePayer" class="scroll-y" style=" margin: -15px;padding: 15px;"> 
-          <h5 class="section-title"> SHARE WITH </h5>
-          <span class="material-icons removeFriend ripple-effect" ng-click="editMode = !editMode" ng-class="{active: editMode}" style="position: absolute; top: .6em; right: 1em;">delete</span>
-          <br>
-          <br>
-          <div id="share-with" class="row">
-              <div class="col-xs-3 text-center text-uppercase avatar-container" ng-repeat="friend in friends | orderBy:'name'" 
-                ng-click="addRemoveFriend(friend)">
-                  <span class="avatar ripple-effect " ng-class="{'avatar--active': friend.active}">
-                    <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
-                    <img src="{{friend.avatar}}" imageonload/>
-                  </span>
-                  <p style="height:16px;">{{friend.name + ' '  + friend.surname}} </p>
-              </div>
-              
-              <div class="col-xs-3 text-center text-uppercase avatar-container" ng-click="currentState = states.addFriend">
-                  <span class="avatar ripple-effect avatar--add" ng-class="{'avatar--active': friend.active}">
-                   <i class="material-icons">add</i>
-                  </span>
-                  <p style="height:16px;">Add new </p>
-              </div>
-
-          </div>
-        </div>
-    </section>
-
-    <section class="step-section" ng-class="{ active : currentState == states.addFriend}">
-        <div ng-show="!showChoosePayer" class="scroll-y">
-          <h5 class="section-title"> ADD FRIEND </h5>
-          <br>
-           <div class="group">      
-              <input type="text" ng-model="newFriend.name" required>
-              <span class="highlight"></span>
-              <span class="bar"></span>
-              <label>Name</label>
-            </div>
-              
-            <div class="group">      
-              <input type="text" ng-model="newFriend.surname" required>
-              <span class="highlight"></span>
-              <span class="bar"></span>
-              <label>Surname</label>
-            </div>
-
-
-        </div>
-    </section>
-
-    <section class="step-section" ng-class="{ active : currentState == states.removeFriend}">
-         
-          <h5 class="section-title"> REMOVE FRIEND </h5>
-          <br>
-          <div class="row">
-            <div class="col-xs-6 text-center col-centered">
-              <img class="col-centered text-center" style="display:block" src="{{lastFriendSelected.avatar}}"/>
-              <br>
-              <p class="text-uppercase"> {{ lastFriendSelected.name + " " + lastFriendSelected.surname }}</p>
-
-              <button class="ripple-effect" ng-click="removeFriend()">Delete</button>
-            </div>
+  <section class="step-section" ng-class="{ active : currentState == states.selectFriends}" style="overflow:hidden;">
+      <div ng-show="!showChoosePayer" class="scroll-y" style="margin:auto -15px;"> 
+        <h5 class="section-title"> SHARE WITH </h5>
+        <span class="material-icons removeFriend ripple-effect" ng-click="editMode = !editMode" ng-class="{active: editMode}" style="position: absolute; top: .6em; right: 1em;">delete</span>
+        <br>
+        <br>
+        <div class="flex-row">
+          <div class="col-xs-3 text-uppercase avatar-container full-center " ng-repeat="friend in friends | orderBy:'name'" 
+            ng-click="addRemoveFriend(friend)">
+              <span class="avatar ripple-effect " ng-class="{'avatar--active': friend.active}">
+                <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
+                <img src="{{friend.avatar}}" imageonload/>
+              </span>
+              <p style="height:16px;">{{friend.name + ' '  + friend.surname}} </p>
           </div>
           
-
-
-    </section>
-
-
-    <section class="step-section" ng-class="{ active : currentState == states.selectFriendsAmount }">
-        <div ng-show="!showChoosePayer">
-          <h5 class="section-title"> SHARE AMOUNT </h5>
-          <br>
-
-          <h4 class="text-center" ng-show="!(friends | filter:{'active':true}).length"> No friends selected. Find friends on the previous tab. 
-          </h4> 
-          <div class="row friend-amount" ng-repeat="friend in friends | filter:{ 'active': true }">
-              <div class="col-xs-3 text-center text-uppercase avatar-container">
-                  <span class="avatar avatar--small" ng-class="{'avatar--active': friend.active}">
-                    <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
-                    <img src="{{friend.avatar}}" imageonload/>
-                  </span>
-              </div>
-
-              <div class="col-xs-4" >
-                <p class="text-uppercase grey" style="margin-bottom:0px">{{friend.name + ' ' + friend.surname}}</p>
-                <p  ng-show="!friend.fix">{{friend.amount | currency:'$ ':2}}</p>
-                <input ng-model="friend.amount" class="fix-input" ng-show="friend.fix" ></input>
-              </div>
-             
-              <div class="col-xs-5" style="padding:0" >
-                <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
-                <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>
-              </div>
-              <br>
-              <br>
-            </div>  
+          <div class="col-xs-3 text-center text-uppercase avatar-container" ng-click="currentState = states.addFriend">
+              <span class="avatar ripple-effect avatar--add" ng-class="{'avatar--active': friend.active}">
+               <i class="material-icons">add</i>
+              </span>
+              <p style="height:16px;">Add new </p>
+          </div>  
         </div>
-      
-        <br>
-
-      <!--   <h5 class="section-title"> Who sacrificed to pay the bill this time? </h5>
-        <br>
-        <div id="share-with" class="row">
-           <div ng-repeat="friend in friends | filter:{ 'active': true } | orderBy:'name'" >
-            <div class="clearfix" ng-if="$index % 4 == 0"></div>
-            <div class="col-xs-3 text-center text-uppercase avatar-container" ng-click=" payer = friend.name+friend.surname;">
-              <span class="avatar" ng-class="{'avatar--active': payer == friend.name+friend.surname }">
-                <span ng-if="payer == friend.name+friend.surname" class="glyphicon glyphicon-ok"></span>
-              </span>{{friend.name + ' '  + friend.surname}}</div>
-            </div>
-        </div>   -->
-
-        <span ng-bind="message" class="text-center"></span> 
-    </section>
-
-  <div id="submit-transaction">
-      <div class="btn-group row" style="width:100%">
-        <button class="{{currentState == states.selectFriendsAmount ? 'col-xs-4': 'col-xs-6'}}" ng-click="doBack()" ng-if="showBack()"><span class="chevron top"></span></button>
-        <button class="col-xs-4" ng-click="reload()" ng-if="currentState == states.selectFriendsAmount">split</button>
-        <button class="col-xs-4" ng-click="submitSplit()" ng-if="currentState == states.selectFriendsAmount" style="border-left:1px solid black;">Prod split</button>
-        <button class="{{currentState == states.enterAmount ? 'col-xs-12': 'col-xs-6'}}" ng-click="doNext()" ng-if="showNext()"><span class="chevron bottom"></span></button>
       </div>
-  </div>
+  </section>
+
+  <section class="step-section" ng-class="{ active : currentState == states.addFriend}">
+      <div ng-show="!showChoosePayer" class="scroll-y">
+        <h5 class="section-title"> ADD FRIEND </h5>
+        <br>
+         <div class="group">      
+            <input type="text" ng-model="newFriend.name" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Name</label>
+          </div>
+            
+          <div class="group">      
+            <input type="text" ng-model="newFriend.surname" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Surname</label>
+          </div>
+
+
+      </div>
+  </section>
+
+  <section class="step-section" ng-class="{ active : currentState == states.removeFriend}">
+       
+        <h5 class="section-title"> REMOVE FRIEND </h5>
+        <br>
+        <div class="row">
+          <div class="col-xs-6 text-center col-centered">
+            <img class="col-centered text-center" style="display:block" src="{{lastFriendSelected.avatar}}"/>
+            <br>
+            <p class="text-uppercase"> {{ lastFriendSelected.name + " " + lastFriendSelected.surname }}</p>
+
+            <button class="ripple-effect" ng-click="removeFriend()">Delete</button>
+          </div>
+        </div>
+  </section>
+
+
+  <section class="step-section" ng-class="{ active : currentState == states.selectFriendsAmount }">
+      <div ng-show="!showChoosePayer">
+        <h5 class="section-title"> SHARE AMOUNT </h5>
+        <br>
+
+        <h4 class="text-center" ng-show="!(friends | filter:{'active':true}).length"> No friends selected. Find friends on the previous tab. 
+        </h4> 
+        <div class="row friend-amount" ng-repeat="friend in friends | filter:{ 'active': true }">
+            <div class="col-xs-3 text-center text-uppercase avatar-container">
+                <span class="avatar avatar--small" ng-class="{'avatar--active': friend.active}">
+                  <span ng-if="friend.active" class="glyphicon glyphicon-ok"></span>
+                  <img src="{{friend.avatar}}" imageonload/>
+                </span>
+            </div>
+
+            <div class="col-xs-4" >
+              <p class="text-uppercase grey" style="margin-bottom:0px">{{friend.name + ' ' + friend.surname}}</p>
+              <p  ng-show="!friend.fix">{{friend.amount | currency:'$ ':2}}</p>
+              <input ng-model="friend.amount" class="fix-input" ng-show="friend.fix" ></input>
+            </div>
+           
+            <div class="col-xs-5" style="padding:0" >
+              <button class="fixed-or-equal left inline" ng-class="{ active: friend.fix }" ng-click="friend.fix =  true">fix</button>
+              <button class="fixed-or-equal right inline" ng-class="{ active: !friend.fix }" ng-click="friend.fix = false">same</button>
+            </div>
+            <br>
+            <br>
+          </div>  
+      </div>
+    
+      <br>
+  </section>
+
+    <div id="submit-transaction">
+        <div class="btn-group row" style="width:100%">
+          <button class="{{currentState == states.selectFriendsAmount ? 'col-xs-4': 'col-xs-6'}}" ng-click="doBack()" ng-if="showBack()"><span class="chevron top"></span></button>
+          <button class="col-xs-4" ng-click="reload()" ng-if="currentState == states.selectFriendsAmount">split</button>
+          <button class="col-xs-4" ng-click="submitSplit()" ng-if="currentState == states.selectFriendsAmount" style="border-left:1px solid black;">Prod split</button>
+          <button class="{{currentState == states.enterAmount ? 'col-xs-12': 'col-xs-6'}}" ng-click="doNext()" ng-if="showNext()"><span class="chevron bottom"></span></button>
+        </div>
+    </div>
 </div>

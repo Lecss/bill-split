@@ -34,8 +34,6 @@ angular.module('billSplitApp')
 
         $scope.newFriend = { name: "", surname : ""};
 
-        $scope.currentState = $scope.states.enterAmount;
-
         $scope.friends = [];
 
         $scope.init = function(){
@@ -50,13 +48,16 @@ angular.module('billSplitApp')
             })
 
             friendsRef.on('child_removed', function(data) {
-                var user = $scope.friends.filter(x=>x.key === data.key);
+                var user = $scope.friends.filter(function(x) { return x.key === data.key});
                 var index = $scope.friends.indexOf(user);
                 $scope.friends.splice(index, 1);
 
                 $scope.currentState = $scope.states.selectFriends;
             });
 
+            $scope.currentState = $scope.states.enterAmount;
+
+            console.log($scope.currentState)
             // $scope.friends.push({
             //     name: "Andreo", surname: "C.", active: false, avatar: "images/andrei.png", amount: 0.00, fix: false
             // }); 

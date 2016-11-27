@@ -18,7 +18,7 @@ angular
     'ngTouch',
     'ngStorage'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $touchProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -33,6 +33,8 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+
+      $touchProvider.ngClickOverrideEnabled(true);
   })
 
   .directive('imageonload', function() {

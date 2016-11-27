@@ -53,7 +53,7 @@
       <div ng-view=""></div>
     </div>
 
-
+    
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
        !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
@@ -112,10 +112,9 @@
           */
 
           (function($) {
-              $(document).on('click', '.ripple-effect', function(e){
+              $(document).on('click touchend', '.ripple-effect', function(e){
                   var rippler = $(this);
 
-                  console.log("SSS");
                   // create .ink element if it doesn't exist
                   if(rippler.find(".ink").length == 0) {
                       rippler.append("<span class='ink'></span>");

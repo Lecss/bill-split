@@ -3,8 +3,9 @@
 .ripple-effect {
   position: relative;
   overflow: hidden;
-  -webkit-transform: translatez(0);
+  //-webkit-transform: translatez(0);
 }
+
 .ink {
   display: block;
   position: absolute;
